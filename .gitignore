@@ -1,0 +1,107 @@
+# Build artifacts
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.libs
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.a
+*.lib
+*.pdb
+*.ilk
+*.exp
+
+# Intermediate files
+*.d
+*.dd
+*.ii
+*.s
+*.asm
+*.tmp
+*.temp
+*.log
+*.pch
+*.cache
+
+# Dependency and package manager data
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+_build/
+CMakeScripts/
+*.cmake
+
+# Visual Studio and VS Code
+*.vcxproj*
+*.sln
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.suo
+*.user
+*.vcproj*
+*.vspscc
+*.vssscc
+*.pdb
+.vs/
+
+# Code::Blocks
+*.cbp
+*.depend
+*.layout
+
+# Qt Creator
+*.pro.user*
+*.pro.user
+*.qbs.user*
+*.qbs.user
+*.moc
+.moc/
+
+# CLion
+.idea/
+cmake-build-*/
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+DerivedData/
+
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows metadata
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# General editor backups
+*~
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Binary assets
+*.bin
+*.dat
+
+# Generated documentation
+/docs/
+*.pdf
