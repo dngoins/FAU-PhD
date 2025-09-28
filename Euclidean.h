@@ -1,3 +1,8 @@
+
+#ifndef EUCLIDEAN_H
+
+#define EUCLIDEAN_H
+
 #pragma once
 #include <iostream>
 
@@ -117,3 +122,4 @@ int power_mod(int base, int exponent, int modulus) {
     return result;
 }
 
+#endif // EUCLIDEAN_H
