@@ -1,4 +1,9 @@
+
+// if not define, define
+#ifndef AES_H
+#define AES_H
 #pragma once
+
 
 #include <array>
 #include <cstdint>
@@ -16,3 +21,5 @@ public:
 private:
 	std::array<std::array<uint8_t, 16>, 11> round_keys_{};
 };
+
+#endif // AES_H
