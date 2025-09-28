@@ -1,5 +1,7 @@
 # AES Demonstration Program
 
+[![CMake Build](https://github.com/dngoins/FAU-PhD/actions/workflows/cmake.yml/badge.svg)](https://github.com/dngoins/FAU-PhD/actions/workflows/cmake.yml)
+
 ## Overview
 
 - Implements an educational AES-128 encryption/decryption flow over 16-byte blocks.
