@@ -1,0 +1,36 @@
+name: CMake Build
+
+on:
+  push:
+    branches: [ main, assignment02 ]
+  pull_request:
+    branches: [ main, assignment02 ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: List build directory
+        run: |
+          ls build
+        shell: bash
+        if: runner.os == 'Linux'
+
+      - name: List build directory (Windows)
+        run: |
+          Get-ChildItem build
+        shell: pwsh
+        if: runner.os == 'Windows'
