@@ -4,7 +4,7 @@ This C++17 command-line application demonstrates the full ElGamal public-key enc
 
 ## Features
 
-- Menu-driven key size selection ranging from 32-bit demo keys up to very large 65,536-bit keys.
+- Menu-driven key size selection ranging from 32-bit demo keys up to very large 65,536-bit keys, along with estimated key-generation times for every choice.
 - Automatic safe-prime generation via Crypto++ `PrimeAndGenerator`.
 - Encryption and decryption implemented with Crypto++ modular arithmetic (`CryptoPP::Integer`).
 - Plaintext chunking sized to the modulus so arbitrary-length UTF-8 strings are supported.
@@ -38,21 +38,21 @@ PS C:\source\repo\github\dngoins\FAU-PhD> .\build\Release\elgamal.exe
 ElGamal Public-Key Encryption (C++17)
 --------------------------------------------------
 Choose key size:
-  1) 32-bit
-  2) 64-bit
-  3) 128-bit
-  4) 256-bit
-  5) 512-bit
-  6) 1024-bit
-  7) 2048-bit
-  8) 4096-bit
-  9) 8192-bit
- 10) 16384-bit
- 11) 32768-bit
- 12) 65536-bit
+  1) 32-bit (~a few seconds)
+  2) 64-bit (~a few seconds)
+  3) 128-bit (~a few seconds)
+  4) 256-bit (~a few seconds)
+  5) 512-bit (~a few seconds)
+  6) 1024-bit (~a few seconds)
+  7) 2048-bit (~a few seconds)
+  8) 4096-bit (~45-120 seconds)
+  9) 8192-bit (~3-6 minutes)
+ 10) 16384-bit (~15-30 minutes)
+ 11) 32768-bit (~1-2 hours)
+ 12) 65536-bit (~4-8 hours)
 Selection: 4
 Generating keys ... this may take a moment.
-Key generation completed in 87 ms
+Key generation completed in 87 ms (~0.09 s)
 Public modulus (p): 606225...
 Generator (g): 5
 Public key (y): 245301...
