@@ -32,16 +32,18 @@ const Integer kOne = 1;
 
 std::string keygen_eta(std::size_t bit_length) {
     switch (bit_length) {
+    case 2048:
+        return "~400-600 seconds";
     case 4096:
-        return "~45-120 seconds";
+        return "~10-30 minutes";
     case 8192:
-        return "~3-6 minutes";
-    case 16384:
-        return "~15-30 minutes";
-    case 32768:
         return "~1-2 hours";
-    case 65536:
+    case 16384:
         return "~4-8 hours";
+    case 32768:
+        return "~24 hours";
+    case 65536:
+        return "~1 week";
     default:
         return "~a few seconds";
     }
@@ -223,18 +225,18 @@ void run_cli() {
     std::cout << "ElGamal Public-Key Encryption (C++17)" << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << "Choose key size:" << std::endl;
-    std::cout << "  1) 32-bit" << std::endl;
-    std::cout << "  2) 64-bit" << std::endl;
-    std::cout << "  3) 128-bit" << std::endl;
-    std::cout << "  4) 256-bit" << std::endl;
-    std::cout << "  5) 512-bit" << std::endl;
-    std::cout << "  6) 1024-bit" << std::endl;
-    std::cout << "  7) 2048-bit" << std::endl;
-    std::cout << "  8) 4096-bit" << std::endl;
-    std::cout << "  9) 8192-bit" << std::endl;
-    std::cout << " 10) 16384-bit" << std::endl;
-    std::cout << " 11) 32768-bit" << std::endl;
-    std::cout << " 12) 65536-bit" << std::endl;
+    std::cout << "  1) 32-bit (" << keygen_eta(32) << ")" << std::endl;
+    std::cout << "  2) 64-bit (" << keygen_eta(64) << ")" << std::endl;
+    std::cout << "  3) 128-bit (" << keygen_eta(128) << ")" << std::endl;
+    std::cout << "  4) 256-bit (" << keygen_eta(256) << ")" << std::endl;
+    std::cout << "  5) 512-bit (" << keygen_eta(512) << ")" << std::endl;
+    std::cout << "  6) 1024-bit (" << keygen_eta(1024) << ")" << std::endl;
+    std::cout << "  7) 2048-bit (" << keygen_eta(2048) << ")" << std::endl;
+    std::cout << "  8) 4096-bit (" << keygen_eta(4096) << ")" << std::endl;
+    std::cout << "  9) 8192-bit (" << keygen_eta(8192) << ")" << std::endl;
+    std::cout << " 10) 16384-bit (" << keygen_eta(16384) << ")" << std::endl;
+    std::cout << " 11) 32768-bit (" << keygen_eta(32768) << ")" << std::endl;
+    std::cout << " 12) 65536-bit (" << keygen_eta(65536) << ")" << std::endl;
     std::cout << "Selection: " << std::flush;
 
     int selection = 0;
@@ -299,7 +301,9 @@ void run_cli() {
     auto end = std::chrono::steady_clock::now();
 
     auto duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "Key generation completed in " << duration_ms << " ms\n";
+    double duration_sec = static_cast<double>(duration_ms) / 1000.0;
+    std::cout << "Key generation completed in " << duration_ms << " ms (~" << std::fixed
+              << std::setprecision(2) << duration_sec << " s)" << std::defaultfloat << "\n";
 
     std::cout << "Public modulus (p): " << public_key.p << "\n";
     std::cout << "Generator (g): " << public_key.g << "\n";
