@@ -4,6 +4,7 @@
 #define EUCLIDEAN_H
 
 #pragma once
+#include <cstdint>
 #include <iostream>
 
 #include <stdexcept>
@@ -121,5 +122,54 @@ int power_mod(int base, int exponent, int modulus) {
     }
     return result;
 }
+
+namespace number_theory {
+
+// Extended Euclidean algorithm for 64-bit integers.
+inline std::int64_t extended_gcd(std::int64_t a, std::int64_t b, std::int64_t &x, std::int64_t &y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+
+    std::int64_t x1 = 0;
+    std::int64_t y1 = 0;
+    std::int64_t gcd = extended_gcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - (a / b) * y1;
+    return gcd;
+}
+
+inline std::uint64_t mod_inverse(std::uint64_t value, std::uint64_t modulus) {
+    if (modulus == 0) {
+        throw std::invalid_argument("Modulus must be non-zero");
+    }
+
+    value %= modulus;
+    if (value == 0) {
+        throw std::runtime_error("Modular inverse does not exist");
+    }
+
+    std::int64_t x = 0;
+    std::int64_t y = 0;
+    std::int64_t gcd = extended_gcd(static_cast<std::int64_t>(value),
+                                     static_cast<std::int64_t>(modulus),
+                                     x,
+                                     y);
+    if (gcd != 1) {
+        throw std::runtime_error("Modular inverse does not exist");
+    }
+
+    std::int64_t mod = static_cast<std::int64_t>(modulus);
+    std::int64_t result = x % mod;
+    if (result < 0) {
+        result += mod;
+    }
+
+    return static_cast<std::uint64_t>(result);
+}
+
+} // namespace number_theory
 
 #endif // EUCLIDEAN_H
