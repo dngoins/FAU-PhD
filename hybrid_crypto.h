@@ -1,3 +1,14 @@
+/*
+Author: Dwight Goins
+Course: 6730 Computer Data Security (Cryptography)
+Date: 10.11.2025
+
+Summary:
+    Implementation a hybrid cryptosystem that combines ElGamal public-key encryption with AES symmetric-key encryption. The hybrid system will use ElGamal to securely exchange a randomly generated AES session key, which will then be used to encrypt and decrypt the actual message data using AES in CBC mode with PKCS#7 padding.
+    
+    The program will request the user to input or generate an ElGamal key pair (public and private keys). It will also allow the user to generate or input an AES session key. The user can then encrypt a plaintext message, which will involve encrypting the AES session key with the ElGamal public key and then encrypting the message with AES using that session key. For decryption, the program will use the ElGamal private key to recover the AES session key and then decrypt the message with AES.
+    
+*/
 #ifndef HYBRID_CRYPTO_H
 #define HYBRID_CRYPTO_H
 #pragma once

@@ -1,78 +1,99 @@
-# ElGamal Public-Key Encryption Demo
+# Hybrid AES + ElGamal Cryptography
 
-This C++17 command-line application demonstrates the full ElGamal public-key encryption flow using the Crypto++ library for big integer arithmetic, safe-prime generation, and cryptographic randomness. The program guides you through selecting a key size, generating a key pair, encrypting a plaintext message, and verifying successful decryption.
+This C++17 project combines a custom AES-128 implementation with ElGamal public-key encryption (via Crypto++) to form a reusable hybrid cryptography toolkit. A small command-line demo walks through generating keys, encrypting text, and recovering the plaintext.
 
-## Features
+## Highlights
 
-- Menu-driven key size selection ranging from 32-bit demo keys up to very large 65,536-bit keys, along with estimated key-generation times for every choice.
-- Automatic safe-prime generation via Crypto++ `PrimeAndGenerator`.
-- Encryption and decryption implemented with Crypto++ modular arithmetic (`CryptoPP::Integer`).
-- Plaintext chunking sized to the modulus so arbitrary-length UTF-8 strings are supported.
-- Hex-formatted ciphertext output and automatic verification that decrypted text matches the original input.
-- Estimated time-to-completion feedback for long key-generation runs (4096 bits and higher).
+- Static library `crypto_core` exposes modular AES and ElGamal components plus a `HybridCrypto` façade for key management and payload encryption.
+- AES uses CBC mode with PKCS#7 padding; 16-byte session keys are randomly generated and can be exported/imported in hex.
+- ElGamal keys enforce a minimum 256-bit modulus and leverage Crypto++ for safe-prime generation and modular arithmetic.
+- Session keys are wrapped with ElGamal so only the holder of the private key can decrypt the symmetric material.
+- A menu-driven demo (`hybrid_demo`) illustrates the full flow and prints formatted shares (wrapped key, IV, ciphertext) for inspection.
 
 ## Requirements
 
-- Windows with Visual Studio 2022 MSVC toolchain (CMake will auto-detect).
+- Windows with Visual Studio 2022 MSVC toolchain (CMake auto-detects it).
 - CMake 3.16 or newer.
-- Git (required so CMake can fetch the `cryptopp-cmake` wrapper).
+- Git so CMake can fetch the `cryptopp-cmake` wrapper.
 
-No manual Crypto++ installation is necessary; CMake fetches and builds it automatically through `FetchContent`.
+CMake downloads and builds Crypto++ automatically—no extra setup is required.
 
 ## Building
 
 ```pwsh
 # From the repository root
 cmake -S . -B build
-cmake --build build --config Release
+cmake --build build --target hybrid_demo --config Release
 # Optional Debug build
-cmake --build build --config Debug
+cmake --build build --target hybrid_demo --config Debug
 ```
 
-Executables are emitted to `build/Release/elgamal.exe` (or `build/Debug/elgamal.exe`).
+`crypto_core.lib` and `hybrid_demo.exe` are emitted under `build/<config>/`.
 
-## Running the Demo
+## Using the Hybrid Demo
+
+Launch the executable and follow the prompts. Typical first-run sequence:
 
 ```pwsh
-PS C:\source\repo\github\dngoins\FAU-PhD> .\build\Release\elgamal.exe
-ElGamal Public-Key Encryption (C++17)
---------------------------------------------------
-Choose key size:
-  1) 32-bit (~a few seconds)
-  2) 64-bit (~a few seconds)
-  3) 128-bit (~a few seconds)
-  4) 256-bit (~a few seconds)
-  5) 512-bit (~a few seconds)
-  6) 1024-bit (~a few seconds)
-  7) 2048-bit (~a few seconds)
-  8) 4096-bit (~45-120 seconds)
-  9) 8192-bit (~3-6 minutes)
- 10) 16384-bit (~15-30 minutes)
- 11) 32768-bit (~1-2 hours)
- 12) 65536-bit (~4-8 hours)
-Selection: 4
-Generating keys ... this may take a moment.
-Key generation completed in 87 ms (~0.09 s)
-Public modulus (p): 606225...
-Generator (g): 5
-Public key (y): 245301...
-Private key (x): 112233...
+PS C:\source\repo\github\dngoins\FAU-PhD> .\build\Debug\hybrid_demo.exe
+=== Hybrid Cryptography Demo ===
+ 1) Generate ElGamal key pair
+ 2) Set public key from hex
+ 3) Set private key from hex
+ 4) Generate new AES session key
+ 5) Set session key from hex
+ 6) View current keys
+ 7) Encrypt message
+ 8) Decrypt last ciphertext
+ 9) Exit
+Select option: 1
+Enter key size in bits (>=256): 256
+Generated new ElGamal key pair.
 
-Enter plaintext message: Hello, ElGamal!
+Select option: 4
+Generated new AES session key.
 
-Ciphertext pairs (a, b):
-  Block 0 (len=14):
-    a = 356902...
-    b = 140550...
+Select option: 7
+Enter plaintext message: Hello hybrid world!
 
-Ciphertext (hex): a=50d4...|b=224f...
+=== Ciphertext Summary ===
+Wrapped session key chunks: 1
+  Chunk 0 (len=16):
+    a = ...
+    b = ...
+IV: ...
+AES-CBC ciphertext: ...
+Encryption complete.
 
-Recovered plaintext: Hello, ElGamal!
-Verification: success
+Select option: 8
+Recovered plaintext: Hello hybrid world!
 ```
 
-> **Note:** Timing grows rapidly for large primes. Keys ≥4096 bits can take minutes or more to generate on typical desktops. The program displays an estimated range before starting the computation so you can decide whether to proceed.
+### Importing Existing Keys
+
+If you already have key material, choose options 2, 3, and 5 to paste hex-encoded values exported from a previous run. The demo validates formatting and rejects inconsistent key sets.
+
+### Programmatic Use
+
+Library consumers can include `hybrid_crypto.h` and interact with the `HybridCrypto` class directly:
+
+```cpp
+#include "hybrid_crypto.h"
+
+HybridCrypto crypto;
+crypto.generate_elgamal_keys(256);
+crypto.generate_session_key();
+
+const auto ciphertext = crypto.encrypt("Sensitive payload");
+const auto recovered = crypto.decrypt(ciphertext);
+```
+
+See `hybrid_demo.cpp` for a full example including hex serialization helpers.
+
+## Legacy ElGamal Demo
+
+The original standalone ElGamal driver (`elgamal.exe`) remains available for exploring raw public-key operations. Build it with `cmake --build build --target elgamal --config Release` if needed.
 
 ## License
 
-This project is provided for educational purposes. Consult local regulations before distributing cryptographic software internationally.
+This project is provided as a final assignment for FAU course 6730 Computer Data Security (Cryptography) for educational purposes. Consult local regulations before distributing cryptographic software internationally.
