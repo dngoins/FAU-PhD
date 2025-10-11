@@ -26,11 +26,34 @@ endif()
 
 set(CRYPTOPP_INCLUDE_DIR "${cryptopp_cmake_SOURCE_DIR}/cryptopp" CACHE PATH "Crypto++ include dir" FORCE)
 
-add_executable(elgamal
+add_library(crypto_core STATIC
+    AES.cpp
+    AES.h
+    crypto_utils.cpp
+    crypto_utils.h
     el_gamal_pke.cpp
     el_gamal_pke.h
     Euclidean.h
+    hybrid_crypto.cpp
+    hybrid_crypto.h
 )
 
-target_include_directories(elgamal PRIVATE ${CRYPTOPP_INCLUDE_DIR})
-target_link_libraries(elgamal PRIVATE cryptopp)
+target_include_directories(crypto_core
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CRYPTOPP_INCLUDE_DIR}
+)
+
+target_link_libraries(crypto_core
+    PUBLIC
+        cryptopp
+)
+
+add_executable(hybrid_demo
+    hybrid_demo.cpp
+)
+
+target_link_libraries(hybrid_demo
+    PRIVATE
+        crypto_core
+)

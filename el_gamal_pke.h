@@ -52,14 +52,19 @@ struct CipherChunk {
 std::pair<PublicKey, PrivateKey> generate_keys(std::size_t bit_length,
                                                CryptoPP::RandomNumberGenerator &rng);
 
+std::vector<CipherChunk> encrypt_bytes(const PublicKey &public_key,
+                                       const std::vector<std::uint8_t> &data,
+                                       CryptoPP::RandomNumberGenerator &rng);
+
+std::vector<std::uint8_t> decrypt_bytes(const PrivateKey &private_key,
+                                        const std::vector<CipherChunk> &ciphertext);
+
 std::vector<CipherChunk> encrypt(const PublicKey &public_key,
                                  const std::string &plaintext,
                                  CryptoPP::RandomNumberGenerator &rng);
 
 std::string decrypt(const PrivateKey &private_key,
                     const std::vector<CipherChunk> &ciphertext);
-
-void run_cli();
 
 } // namespace elgamal
 
